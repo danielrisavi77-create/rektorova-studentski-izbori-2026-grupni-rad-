@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Locked analysis results snapshot",
+  "type": "object",
+  "minProperties": 1
+}
