@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rektorova research release metadata",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema_version", "release_id", "release_date", "dataset_version", "web_companion_version", "data_lock_status", "lock_cycle", "tests_passed", "universe", "source_registry", "h2_seat_coverage", "canonical_artifacts", "integrity"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "1.0"},
+    "release_id": {"type": "string", "minLength": 1},
+    "release_date": {"type": "string", "format": "date"},
+    "dataset_version": {"type": "string", "minLength": 1},
+    "web_companion_version": {"type": "string", "minLength": 1},
+    "data_lock_status": {"type": "string", "const": "FINAL_DATA_LOCK"},
+    "lock_cycle": {"type": "integer", "minimum": 1},
+    "tests_passed": {"type": "integer", "minimum": 0},
+    "universe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["components", "cycles", "theoretical_component_cycles", "not_in_panel", "panel_rows", "missing_turnout_denominator", "complete_turnout_rows"],
+      "properties": {
+        "components": {"type": "integer", "const": 36},
+        "cycles": {"type": "integer", "const": 5},
+        "theoretical_component_cycles": {"type": "integer", "const": 180},
+        "not_in_panel": {"type": "integer", "const": 2},
+        "panel_rows": {"type": "integer", "const": 178},
+        "missing_turnout_denominator": {"type": "integer", "const": 3},
+        "complete_turnout_rows": {"type": "integer", "const": 175}
+      }
+    },
+    "source_registry": {"type": "object"},
+    "h2_seat_coverage": {
+      "type": "object",
+      "required": ["status_records", "numeric_verified_units", "imputation_used"],
+      "properties": {
+        "status_records": {"type": "integer", "const": 34},
+        "numeric_verified_units": {"type": "integer", "const": 11},
+        "imputation_used": {"type": "boolean", "const": false}
+      }
+    },
+    "canonical_artifacts": {"type": "object", "minProperties": 1},
+    "integrity": {
+      "type": "object",
+      "required": ["algorithm", "panel_sha256_prefix", "full_hashes_location"],
+      "properties": {
+        "algorithm": {"type": "string", "const": "SHA-256"},
+        "panel_sha256_prefix": {"type": "string", "pattern": "^[0-9a-f]{16,64}$"},
+        "full_hashes_location": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
