@@ -2,10 +2,11 @@
 
 ## Dizajn reproducibilnog istraživačkog sustava
 
-**Status:** odobren dizajn za implementaciju  
+**Status:** odobren dizajn, spreman za implementacijski plan  
 **Datum:** 2026-08-09  
 **Repo:** `danielrisavi77-create/rektorova-studentski-izbori-2026-grupni-rad-`  
-**Projektni naslov:** `rektorova-studentski-izbori-2026 (grupni rad)`
+**Projektni naslov:** `rektorova-studentski-izbori-2026 (grupni rad)`  
+**Trenutačna vidljivost repozitorija:** public
 
 ---
 
@@ -16,13 +17,13 @@ Repozitorij nije samo spremište rada i priloga. On mora biti kanonski, reproduc
 1. provjeriti svaka ključna brojka u radu;
 2. pratiti svaka ključna tvrdnja do analitičkog rezultata i izvornog podatka;
 3. reproducirati ključne statističke rezultate;
-4. dokazati integritet zaključanih artefakata hash vrijednostima;
+4. dokazati integritet zaključanih artefakata SHA-256 vrijednostima;
 5. automatski otkriti neslaganje između rada, web-stranice i strojnog izvora istine;
-6. izgraditi javni web-sloj bez ručnog prepisivanja zaključanih brojki;
+6. izgraditi web-sloj bez ručnog prepisivanja zaključanih brojki;
 7. napraviti verzionirani release prikladan za Zenodo/OSF i DOI;
 8. jasno razlikovati konfirmacijske, parcijalne i eksplorativne rezultate.
 
-Temeljno načelo je: **jedna analitička istina, više prikaza**. Word/PDF rad i web-stranica nisu dva neovisna izvora, nego dvije projekcije istih zaključanih podataka i rezultata.
+Temeljno načelo je **jedna analitička istina, više prikaza**. Word/PDF rad i web-stranica nisu dva neovisna izvora, nego dvije projekcije istih zaključanih podataka i rezultata.
 
 ---
 
@@ -42,7 +43,7 @@ Planirani ključni artefakti:
 
 ### 2.2. Kanonski rezultati
 
-`analysis/results_snapshot.json` sadržava brojčane rezultate koji se citiraju u radu i prikazuju na webu. To je jedini strojni izvor za zaključane procjene poput H1, H2, H3, H4/H4', H4b i H5.
+`analysis/results_snapshot.json` sadržava brojčane rezultate koji se citiraju u radu i prikazuju na webu. To je jedini strojni izvor za zaključane procjene H1, H2, H3, H4, H4', H4b i H5.
 
 Nijedna zaključana procjena ne smije biti ručno duplicirana kao autoritativna vrijednost u više datoteka.
 
@@ -55,7 +56,7 @@ Nijedna zaključana procjena ne smije biti ručno duplicirana kao autoritativna 
 - procjenom i intervalom;
 - uzorkom i brojem klastera gdje je relevantno;
 - ključem u `results_snapshot.json`;
-- tablicom/slikom/poglavljem u radu;
+- tablicom, slikom i poglavljem u radu;
 - web-anchorom;
 - skriptom koja generira rezultat;
 - relevantnim podatkovnim artefaktom;
@@ -76,10 +77,9 @@ Nijedna zaključana procjena ne smije biti ručno duplicirana kao autoritativna 
 - broj redaka panela;
 - broj redaka s potpunom izlaznošću;
 - hash ključnih artefakata;
-- Git commit SHA;
 - status releasea.
 
-`release.json` je jedini autoritativni izvor za release-level metapodatke.
+`release.json` je jedini autoritativni izvor za release-level metapodatke. Git commit SHA ne upisuje se kao samoreferencijalno kanonsko polje u istu datoteku koja se commita i hashira. Točan commit svakog javnog releasea određuju Git tag i GitHub release metadata. Ako je potreban strojno čitljiv commit u distributivnom paketu, CI ga pri izradi artefakta zapisuje u zasebni generirani `release-build.json`, koji nije kanonski ulaz niti dio hash petlje.
 
 ---
 
@@ -93,7 +93,7 @@ Sustav mora identično prikazivati isti sampling funnel u radu i na webu:
 - 3 nemaju izračunljivu izlaznost zbog nedostupnog nazivnika;
 - 175 redaka s potpunom izlaznošću.
 
-Te vrijednosti ne smiju se ručno unositi u Word i HTML kao neovisne konstante. Generator ih mora povlačiti iz kanonskih release/podatkovnih metapodataka.
+Te vrijednosti ne smiju se ručno unositi u Word i HTML kao neovisne konstante. Generator ili validator ih mora povlačiti iz kanonskih release/podatkovnih metapodataka.
 
 ---
 
@@ -172,13 +172,11 @@ Web i rad ne smiju formulacijom stvarati dojam da svih 34 jedinice imaju numeri�
         └── reproducibility.yml
 ```
 
-Granice modula moraju ostati jasne: podatci nisu generatori, generatori nisu validatori, validatori ne mijenjaju podatke, a web i paper layer ne postaju izvori istine.
+Granice modula moraju ostati jasne: podatci nisu generatori, generatori nisu validatori, validatori ne mijenjaju podatke, a web i paper layer nikada ne postaju izvori istine.
 
 ---
 
 ## 6. Tok podataka
-
-Kanonski tok je:
 
 ```text
 SLUŽBENI IZVORI
@@ -217,14 +215,14 @@ Svaki sloj smije čitati samo definirane upstream artefakte. Nijedan downstream 
 
 Word ostaje glavni urednički format rada kako bi se sačuvao postojeći izgled, stil, numeracija, tablice i grafička struktura. Ne uvodi se potpuna migracija na Quarto u ovoj fazi.
 
-`sync_paper.py` mora provjeravati i, gdje je tehnički sigurno, ažurirati samo strogo označena sinkronizacijska polja. Ne smije nekontrolirano preformatirati dokument.
+`sync_paper.py` mora prvenstveno provjeravati, a samo gdje je tehnički sigurno ažurirati, strogo označena sinkronizacijska polja. Ne smije nekontrolirano preformatirati dokument.
 
 Obvezne sinkronizirane cjeline:
 
 - release metadata;
 - 180 → 178 → 175 funnel;
-- H1–H5/H4' ključne zaključane procjene;
-- status konfirmacijsko/parcijalno/eksplorativno;
+- H1, H2, H3, H4, H4', H4b i H5 ključne zaključane procjene i statusi;
+- konfirmacijsko/parcijalno/eksplorativno označavanje;
 - broj službenih i sinkronizacijskih testova;
 - hash i release ID u reproducibilnom prilogu;
 - Claim-to-Evidence indeks.
@@ -242,7 +240,7 @@ Web je interaktivni dokazni sloj. Mora sadržavati:
 - sampling funnel;
 - reproducibility/download sekciju;
 - veze prema `claims.json`, `release.json`, `MANIFEST.json` i podatcima;
-- dvosmjerne reference prema poglavljima/tablicama/slikama rada.
+- dvosmjerne reference prema poglavljima, tablicama i slikama rada.
 
 Web ne smije sadržavati zaključane brojeve kao ručno održavane neovisne konstante ako su već dostupni iz kanonskih JSON artefakata.
 
@@ -250,7 +248,7 @@ Web ne smije sadržavati zaključane brojeve kao ručno održavane neovisne kons
 
 ## 8. Claim-to-Evidence model
 
-Minimalni claim zapis treba imati:
+Minimalni claim zapis:
 
 ```json
 {
@@ -270,13 +268,13 @@ Minimalni claim zapis treba imati:
 }
 ```
 
-Schema će se formalizirati i validirati testovima. ID-jevi moraju biti stabilni nakon javnog releasea.
+Schema se formalizira i validira testovima. ID-jevi postaju stabilni nakon prvog javnog releasea.
 
 ---
 
 ## 9. Provenijencija i izvori
 
-Za svaki izvorni dokument registar treba čuvati najmanje:
+Za svaki izvorni dokument registar čuva najmanje:
 
 - ciklus;
 - sastavnicu;
@@ -293,6 +291,8 @@ Za svaki izvorni dokument registar treba čuvati najmanje:
 
 Repozitorij neće automatski redistribuirati službene PDF-ove kada prava distribucije nisu jasna. U takvim slučajevima čuvaju se metapodatci, stabilne poveznice, arhivski trag i dokazna napomena.
 
+Budući da je repo trenutačno public, prije svakog commita treba provjeriti da se ne objavljuju privatni podatci, pristupni tokeni, lokalne putanje s osjetljivim informacijama ili dokumenti za koje ne postoji opravdanje za redistribuciju.
+
 ---
 
 ## 10. Manifest i integritet
@@ -307,6 +307,8 @@ Repozitorij neće automatski redistribuirati službene PDF-ove kada prava distri
 - oznaku je li artefakt kanonski, generiran ili pomoćni.
 
 Validator mora pasti ako hash zaključanog artefakta više ne odgovara manifestu bez promjene lock cyclea/releasea.
+
+`MANIFEST.json` ne smije uključivati samoga sebe u vlastiti hash skup, a generirani `release-build.json` također se ne tretira kao kanonski zaključani ulaz.
 
 ---
 
@@ -338,8 +340,6 @@ Validator je read-only: otkriva problem i vraća non-zero exit code, ali ne popr
 
 Razvoj sinkronizacijskog sustava slijedi TDD.
 
-Testovi se organiziraju u zasebne skupine:
-
 ### Dataset tests
 
 - očekivani broj redaka;
@@ -352,7 +352,7 @@ Testovi se organiziraju u zasebne skupine:
 
 - kanonske vrijednosti postoje;
 - tipovi i jedinice su valjani;
-- CI granice su numerički konzistentne;
+- intervali su numerički konzistentni;
 - claim status odgovara snapshotu.
 
 ### Sync tests
@@ -379,7 +379,7 @@ Testovi se organiziraju u zasebne skupine:
 - `push` na glavnu granu;
 - svaki pull request;
 - ručno pokretanje;
-- release/tag workflow gdje bude uveden.
+- release/tag workflow kada bude uveden.
 
 Minimalni CI pipeline:
 
@@ -407,10 +407,10 @@ Release se smije označiti kao finalan samo kada:
 - svi testovi prolaze;
 - `validate_sync.py` prolazi;
 - `MANIFEST.json` je svježe generiran;
-- `release.json` ima odgovarajući commit SHA;
 - rad i web prikazuju iste ključne rezultate;
 - svi claimovi imaju dokazni trag;
-- nema nedokumentiranih ručnih promjena zaključanih vrijednosti.
+- nema nedokumentiranih ručnih promjena zaključanih vrijednosti;
+- Git tag pokazuje na commit koji je prošao završni CI.
 
 Plan oznaka:
 
@@ -436,7 +436,7 @@ README mora jednostavno objasniti:
 8. kako citirati rad/dataset;
 9. koji je aktualni release i lock status.
 
-README ne smije marketingom preuveličavati stupanj kauzalne identifikacije ili potpunost dokumentacije.
+README ne smije preuveličavati stupanj kauzalne identifikacije ili potpunost dokumentacije.
 
 ---
 
@@ -448,7 +448,7 @@ Repo mora odvojiti:
 - status/licencu izvedenih podatkovnih artefakata;
 - prava trećih strana nad službenim izvornim dokumentima.
 
-`CITATION.cff` treba sadržavati sve autore grupnog rada redoslijedom koji koristi finalni rad. Imena autora ne smiju se pretpostavljati iz repozitorija; preuzimaju se iz zaključane finalne verzije rada/release metapodataka.
+`CITATION.cff` mora sadržavati sve autore grupnog rada redoslijedom koji koristi finalni rad. Imena autora ne pretpostavljaju se iz GitHub računa; preuzimaju se iz zaključane finalne verzije rada/release metapodataka.
 
 ---
 
@@ -477,7 +477,7 @@ Preporučeni workflow za promjene:
 2. testovi moraju proći;
 3. ako se mijenja zaključani podatak, mora se eksplicitno otvoriti novi lock cycle;
 4. ažuriraju se snapshot, claims, release i manifest;
-5. svi downstream prikazi regeneriraju se;
+5. svi downstream prikazi regeneriraju se ili ponovno validiraju;
 6. tek tada merge.
 
 ---
@@ -507,7 +507,7 @@ Prva implementacija smatra se završenom kada vrijedi sve sljedeće:
 6. Word rad nalazi se u `paper/` i prolazi paper sync provjeru;
 7. sampling funnel je identičan u svim slojevima;
 8. H2 34/11 razlika je eksplicitna i testirana;
-9. claim registry pokriva sve glavne hipoteze i eksplorativne dodatke;
+9. claim registry pokriva H1, H2, H3, H4, H4', H4b i H5;
 10. CI prolazi na glavnoj grani;
 11. namjerno uveden drift uzrokuje pad CI-ja;
 12. reproducibility README omogućuje trećoj osobi razumjeti kako provjeriti ključni rezultat;
@@ -521,7 +521,7 @@ Prva implementacija smatra se završenom kada vrijedi sve sljedeće:
 2. kanonski release/claim schema;
 3. uvoz zaključanih artefakata;
 4. manifest generator;
-5. validator i testovi;
+5. validator i TDD testovi;
 6. paper sync provjera;
 7. web sync i generiranje;
 8. CI workflow;
