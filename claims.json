@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "release_id": "UNIZG-SZ-2017-2025-sync1",
+  "claims": [
+    {
+      "id": "CLAIM-H1-SIZE",
+      "hypothesis": "H1",
+      "class": "confirmatory",
+      "title": "Veličina biračkog tijela",
+      "claim": "Udvostručenje biračkog tijela povezano je s izlaznošću nižom za 4,45 postotnih bodova.",
+      "estimate_pp": -4.45,
+      "ci95": [-6.38, -2.52],
+      "inference": "WCB p=0,003",
+      "status": "snažno i robusno podržana",
+      "paper": ["poglavlje 6", "Tablica 9", "Slika 16", "Tablica C1"],
+      "web_anchor": "#claim-h1",
+      "machine_result": "../output/results_snapshot.json"
+    },
+    {
+      "id": "CLAIM-H2-CANDIDATES",
+      "hypothesis": "H2",
+      "class": "confirmatory-partial",
+      "title": "Natjecateljnost kandidatura",
+      "claim": "Veći broj kandidatura povezan je s višom izlaznošću; unaprijed definirani omjer kandidata po mjestu potvrđen je samo na parcijalno pokrivenom poduzorku.",
+      "candidate_count_effect_pp": 0.37,
+      "candidate_count_p": 0.0007,
+      "candidate_lists_n": 34,
+      "seat_status_records_n": 34,
+      "seat_numeric_verified_n": 11,
+      "ratio_effect_pp": 10.16,
+      "ratio_ci95": [5.36, 14.95],
+      "ratio_n": 11,
+      "status": "snažno smjerno poduprta parcijalnim dokazom; ne potpuno potvrđena",
+      "paper": ["poglavlje 6", "Tablica 8", "Tablica 9", "Tablica C1"],
+      "web_anchor": "#claim-h2"
+    },
+    {
+      "id": "CLAIM-H3-FIELD",
+      "hypothesis": "H3",
+      "class": "confirmatory",
+      "title": "Znanstveno polje",
+      "claim": "Umjetničko polje ima procijenjeni pozitivan odmak prema društvenom, ali interval obuhvaća nulu.",
+      "estimate_pp": 8.74,
+      "ci95": [-5.51, 22.98],
+      "p": 0.229,
+      "status": "očekivani smjer, statistički neodlučena",
+      "paper": ["poglavlje 6", "Tablica 6", "Tablica 9", "Tablica C1"],
+      "web_anchor": "#claim-h3"
+    },
+    {
+      "id": "CLAIM-H4-TURNOUT",
+      "hypothesis": "H4",
+      "class": "confirmatory",
+      "title": "Politička blizina — izlaznost",
+      "claim": "Izvorna H4 nije potvrđena jer je ekstenzivna margina proceduralno snažno vezana; 35 od 39 parova imaju identičnu izlaznost.",
+      "pairs_n": 39,
+      "identical_pairs_n": 35,
+      "status": "nije potvrđena u izvornoj operacionalizaciji",
+      "paper": ["poglavlje 6", "Tablica 9", "Slika 11"],
+      "web_anchor": "#claim-h4"
+    },
+    {
+      "id": "CLAIM-H4P-VALID",
+      "hypothesis": "H4'",
+      "class": "exploratory",
+      "title": "Premija valjanih glasova",
+      "claim": "Fakultetsko tijelo ima prosječnu premiju valjanih glasova od 1,25 postotnih bodova.",
+      "estimate_pp": 1.25,
+      "ci95": [0.58, 1.91],
+      "p": 0.0002,
+      "positive_pairs": 32,
+      "pairs_n": 39,
+      "status": "sekundarni eksplorativni obrazac",
+      "paper": ["poglavlje 6", "Tablica 7", "Tablica 9", "Tablica C1"],
+      "web_anchor": "#claim-h4p"
+    },
+    {
+      "id": "CLAIM-H4B-GRADIENT",
+      "hypothesis": "H4b",
+      "class": "exploratory",
+      "title": "Gradijent premije blizine",
+      "claim": "Procijenjeni gradijent iznosi -0,47 postotnih bodova po udvostručenju i ide suprotno početnom očekivanju.",
+      "estimate_pp": -0.47,
+      "p": 0.045,
+      "status": "obrat očekivanog smjera; eksplorativno",
+      "paper": ["poglavlje 6", "Tablica 9", "Tablica C1"],
+      "web_anchor": "#claim-h4b"
+    },
+    {
+      "id": "CLAIM-H5-TIME",
+      "hypothesis": "H5",
+      "class": "confirmatory",
+      "title": "Vremenska dinamika",
+      "claim": "Putanja nije monotona: 2021. bilježi dubok pad, 2023. povratak blizu 2017., a 2025. ponovno nižu razinu.",
+      "fixed_effects_pp_vs_2017": {"2019": 4.02, "2021": -9.86, "2023": -0.35, "2025": -4.99},
+      "p_2021": "<0,001",
+      "p_2025": 0.0152,
+      "status": "podržana u nelinearnom obliku",
+      "paper": ["poglavlje 6", "Tablica 9", "Tablica C2"],
+      "web_anchor": "#claim-h5"
+    }
+  ]
+}
